@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  fin_api:
+    image: postgres:latest
+    container_name: fin_api
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=fin_api
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+    volumes:
+      - fin_api:/data/postgres
+
+
+  api:
+    build: .
+    container_name: api_financeiro
+    ports:
+      - 3333:3333
+      - 9229:9229
+    volumes:
+      - .:/app
+    links:
+      - fin_api
+    depends_on:
+      - fin_api
+
+
+volumes:
+  fin_api:
+  api:
